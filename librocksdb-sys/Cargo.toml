@@ -13,7 +13,7 @@ links = "rocksdb"
 
 [features]
 default = [ "static" ]
-jemalloc = [ "tikv-jemalloc-sys" ]
+jemalloc = []
 static = []
 snappy = []
 lz4 = []
@@ -33,7 +33,7 @@ cc = { version = "1.0", features = ["parallel"] }
 bindgen = { version = "0.58.1", default-features = false, features = ["runtime"] }
 glob = "0.3"
 
-[dependencies.tikv-jemalloc-sys]
-version = "0.4"
+[dependencies.jemalloc-sys]
+version = "0.3"
 optional = true
 features = ["unprefixed_malloc_on_supported_platforms"]
