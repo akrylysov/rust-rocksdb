@@ -110,4 +110,4 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --features jemalloc --target {{ $matrix.target }}
+          args: --features jemalloc --target ${{ matrix.target }}
