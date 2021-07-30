@@ -57,7 +57,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        build: [Linux, macOS, Windows]
+        build: [Linux, macOS, Windows, Windows-GNU]
         include:
           - build: Linux
             os: ubuntu-latest
@@ -65,6 +65,9 @@ jobs:
             os: macos-latest
           - build: Windows
             os: windows-latest
+          - build: Windows-GNU
+            os: windows-latest
+            target: x86_64-pc-windows-gnu
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
@@ -78,7 +81,7 @@ jobs:
           profile: minimal
           override: true
       - name: Remove msys64 # Workaround to resolve link error with C:\msys64\mingw64\bin\libclang.dll
-        if: runner.os == 'Windows'
+        if: matrix.target == 'x86_64-pc-windows-msvc'
         run: Remove-Item -LiteralPath "C:\msys64\" -Force -Recurse
       - name: Install dependencies
         if: runner.os == 'Windows'
@@ -100,6 +103,7 @@ jobs:
           command: test
           args: --features multi-threaded-cf
       - name: Run rocksdb tests (jemalloc)
+        if: matrix.target != 'x86_64-pc-windows-msvc'
         uses: actions-rs/cargo@v1
         with:
           command: test
