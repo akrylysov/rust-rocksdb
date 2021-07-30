@@ -106,7 +106,7 @@ jobs:
           command: test
           args: --features multi-threaded-cf
       - name: Run rocksdb tests (jemalloc)
-        if: runner.os != 'Windows' || matrix.target == 'x86_64-pc-windows-gnu'
+        if: matrix.target != '' && (runner.os != 'Windows' || matrix.target == 'x86_64-pc-windows-gnu')
         uses: actions-rs/cargo@v1
         with:
           command: test
