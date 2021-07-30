@@ -81,7 +81,7 @@ jobs:
           profile: minimal
           override: true
       - name: Remove msys64 # Workaround to resolve link error with C:\msys64\mingw64\bin\libclang.dll
-        if: runner.os == 'Windows' && matrix.target != 'x86_64-pc-windows-gnu'
+        if: runner.os == 'Windows'
         run: Remove-Item -LiteralPath "C:\msys64\" -Force -Recurse
       - name: Install dependencies
         if: runner.os == 'Windows'
