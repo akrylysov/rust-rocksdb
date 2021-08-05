@@ -57,7 +57,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        build: [Linux, macOS, Windows, Windows-GNU]
+        build: [Linux, macOS, Windows]
         include:
           - build: Linux
             os: ubuntu-latest
@@ -65,9 +65,6 @@ jobs:
             os: macos-latest
           - build: Windows
             os: windows-latest
-          - build: Windows-GNU
-            os: windows-latest
-            target: x86_64-pc-windows-gnu
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
@@ -80,9 +77,6 @@ jobs:
           target: ${{ matrix.target }}
           profile: minimal
           override: true
-      - name: Set default target
-        if: matrix.target != ''
-        run: rustup set default-host ${{ matrix.target }}
       - name: Remove msys64 # Workaround to resolve link error with C:\msys64\mingw64\bin\libclang.dll
         if: runner.os == 'Windows'
         run: Remove-Item -LiteralPath "C:\msys64\" -Force -Recurse
@@ -106,8 +100,8 @@ jobs:
           command: test
           args: --features multi-threaded-cf
       - name: Run rocksdb tests (jemalloc)
-        if: matrix.target != '' && (runner.os != 'Windows' || matrix.target == 'x86_64-pc-windows-gnu')
+        if: runner.os != 'Windows'
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --features jemalloc --target ${{ matrix.target }}
+          args: --features jemalloc
